@@ -11,6 +11,7 @@ import screeps.utils.memory.memory
 var CreepMemory.building: Boolean by memory { false }
 var CreepMemory.pause: Int by memory { 0 }
 var CreepMemory.role by memory(Role.UNASSIGNED)
+var CreepMemory.resourceIndex by memory { 0 }
 
 
 /* Rest of the persistent memory structures.
@@ -28,6 +29,7 @@ var FlagMemory.test : Int by memory { 0 }
 
 /* room.memory */
 var RoomMemory.numberOfCreeps : Int by memory { 0 }
+var RoomMemory.hasBuiltResourceRoads by memory { false }
 
 /* spawn.memory */
 var SpawnMemory.test : Int by memory { 0 }
