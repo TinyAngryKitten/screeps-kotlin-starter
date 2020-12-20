@@ -12,6 +12,7 @@ var CreepMemory.building: Boolean by memory { false }
 var CreepMemory.pause: Int by memory { 0 }
 var CreepMemory.role by memory(Role.UNASSIGNED)
 var CreepMemory.resourceIndex by memory { 0 }
+var CreepMemory.temporaryTask : Role by memory {Role.UNASSIGNED}
 
 
 /* Rest of the persistent memory structures.
@@ -27,6 +28,7 @@ var PowerCreepMemory.test : Int by memory { 0 }
 /* flag.memory */
 var FlagMemory.test : Int by memory { 0 }
 
+//TODO: remember how many workers of each kind is needed per room
 /* room.memory */
 var RoomMemory.numberOfCreeps : Int by memory { 0 }
 var RoomMemory.hasBuiltResourceRoads by memory { false }
