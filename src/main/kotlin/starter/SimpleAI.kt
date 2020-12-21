@@ -2,9 +2,18 @@ package starter
 
 
 import building.buildExtensionsCloseToController
+import creeps.build
+import creeps.harvest
+import creeps.upgrade
+import data.Role
+import decisions.determineBuildersNeeded
+import decisions.determineHarvestersNeeded
+import decisions.determineUpgradersNeeded
+import decisions.spawnCreeps
 import screeps.api.*
 import screeps.api.structures.StructureSpawn
 import screeps.utils.isEmpty
+import screeps.utils.memory.memory
 import screeps.utils.unsafe.delete
 import screeps.utils.unsafe.jsObject
 
@@ -30,43 +39,6 @@ fun gameLoop() {
             Role.UPGRADER -> controller?.let { creep.upgrade(it)}
             else -> {}
         }
-    }
-}
-
-private fun spawnCreeps(
-        creeps: Array<Creep>,
-        spawn: StructureSpawn
-) {
-
-    val body = arrayOf<BodyPartConstant>(WORK, CARRY, MOVE)
-
-    if (spawn.spawning != null || spawn.room.energyAvailable < body.sumBy { BODYPART_COST[it] ?: 0 }) {
-        return
-    }
-
-    val role: Role = when {
-        creeps.count { it.memory.role == Role.HARVESTER } < 2 -> Role.HARVESTER
-
-        creeps.none { it.memory.role == Role.UPGRADER } -> Role.UPGRADER
-
-        spawn.room.find(FIND_MY_CONSTRUCTION_SITES).isNotEmpty() &&
-                creeps.count { it.memory.role == Role.BUILDER } < 2 -> Role.BUILDER
-
-        else -> return
-    }
-
-    val newName = "${role.name}_${Game.time}"
-    val code = spawn.spawnCreep(body, newName, options {
-        memory = jsObject<CreepMemory> {
-            this.role = role
-            this.resourceIndex = 0
-        }
-    })
-
-    when (code) {
-        OK -> console.log("spawning $newName with body $body")
-        ERR_BUSY, ERR_NOT_ENOUGH_ENERGY -> run { } // do nothing
-        else -> console.log("unhandled error code $code")
     }
 }
 
