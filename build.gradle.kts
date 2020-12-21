@@ -27,6 +27,7 @@ val minifiedJsDirectory: String = File(buildDir, "minified-js").absolutePath
 
 kotlin {
     js {
+        moduleName = "main"
         useCommonJs()
         browser {
             @Suppress("EXPERIMENTAL_API_USAGE")

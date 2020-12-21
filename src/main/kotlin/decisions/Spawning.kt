@@ -40,19 +40,17 @@ private fun ensureWorkersNeededAreKnown(room : Room) {
     if(room.memory.repairersNeeded.isEmpty()) room.memory.repairersNeeded = room.find(FIND_SOURCES).map { 1 }
 }
 
+fun canSpawnNewCreep(spawn: StructureSpawn, body : Array<BodyPartConstant>) =
+    spawn.spawning != null || spawn.room.energyAvailable < body.sumBy { BODYPART_COST[it] ?: 0 }
 
 fun spawnCreeps(
         creeps: Array<Creep>,
         spawn: StructureSpawn
 ) {
-    ensureWorkersNeededAreKnown(spawn.room)
-
-
     val body = arrayOf<BodyPartConstant>(WORK, CARRY, MOVE)
 
-    if (spawn.spawning != null || spawn.room.energyAvailable < body.sumBy { BODYPART_COST[it] ?: 0 }) {
-        return
-    }
+    if(canSpawnNewCreep(spawn,body)) return
+    ensureWorkersNeededAreKnown(spawn.room)
 
     val role: Role = when {
         creeps.count { it.memory.role == Role.HARVESTER } < 2 -> Role.HARVESTER

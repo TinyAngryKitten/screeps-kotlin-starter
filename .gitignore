@@ -2,6 +2,11 @@
 *.iml
 .gradle/
 out/
-build/
-
+js/
+libs/
+distributions/
+kotlin/
+reports/
+tmp/
+*compiler.options
 gradle.properties
