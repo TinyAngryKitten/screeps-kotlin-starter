@@ -27,6 +27,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         force: true
+    - uses: actions/checkout@v1
     - name: Deploy to screeps
       uses: aphistic/screeps-deployer@master
       env: 
