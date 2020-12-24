@@ -1,0 +1,24 @@
+# This is a basic workflow to help you get started with Actions
+
+name: build js files for screeps
+
+# Controls when the action will run. 
+on: push
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: gradlew build
+      run: sh gradlew.sh build
+    - name: stage changed files
+      run: git add *
+    - name: commit changed files
+      run: git commit -m "update js files"
+    - name: push code to master
+      run: git push origin HEAD:master
