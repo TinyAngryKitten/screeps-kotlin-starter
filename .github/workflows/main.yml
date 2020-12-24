@@ -29,4 +29,5 @@ jobs:
         force: true
     - name: Deploy to screeps
       uses: aphistic/screeps-deployer@master
-      with: ${{ secrets.SCREEPS_TOKEN }}
+      with: 
+        secrets: ${{ secrets.SCREEPS_TOKEN }}
