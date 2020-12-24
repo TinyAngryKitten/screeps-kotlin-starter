@@ -2,6 +2,7 @@ package creeps
 
 import data.Role
 import screeps.api.*
+import starter.resourceIndex
 import starter.temporaryTask
 
 fun Creep.harvestIsPossible(storeOwner : StoreOwner?) : Boolean =
@@ -22,17 +23,17 @@ fun Creep.harvest(fromRoom: Room = this.room, toRoom: Room = this.room) {
 
     if (store[RESOURCE_ENERGY] < store.getCapacity()) {
         val sources = fromRoom.find(FIND_SOURCES)
-        if (harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-            when(val error = moveTo(sources[0].pos)) {
+        if (harvest(sources[memory.resourceIndex]) == ERR_NOT_IN_RANGE) {
+            when(val error = moveTo(sources[memory.resourceIndex].pos)) {
                 OK -> {}
-                else -> console.log("creep is unable to move due to: $error")
+                else -> console.log("$name is unable to move due to: $error")
             }
         }
     } else {
         if (transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             when(val error = moveTo(target.pos)) {
                 OK -> {}
-                else -> console.log("creep is unable to move due to: $error")
+                else -> console.log("$name is unable to move due to: $error")
             }
         }
     }

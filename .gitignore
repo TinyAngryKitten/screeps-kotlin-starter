@@ -10,3 +10,4 @@ reports/
 tmp/
 *compiler.options
 gradle.properties
+.DS_Store

@@ -11,6 +11,7 @@ fun Creep.doTemporaryTask() {
         repairIsPossible(room) -> Role.REPAIRER
         else -> Role.UPGRADER
     }
+    say("temp: ${memory.temporaryTask}")
 
     when(memory.temporaryTask){
         Role.HARVESTER -> harvest()

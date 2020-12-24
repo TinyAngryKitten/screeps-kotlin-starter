@@ -43,31 +43,36 @@ private fun ensureWorkersNeededAreKnown(room : Room) {
 fun canSpawnNewCreep(spawn: StructureSpawn, body : Array<BodyPartConstant>) =
     spawn.spawning != null || spawn.room.energyAvailable < body.sumBy { BODYPART_COST[it] ?: 0 }
 
-fun spawnCreeps(
-        creeps: Array<Creep>,
-        spawn: StructureSpawn
-) {
+fun shouldBuildMoreWorkers(nrNeeded: Int, creeps: Array<Creep>, role : Role, forResource: Int) =
+    nrNeeded > creeps.count { it.memory.role == role && it.memory.resourceIndex == forResource}
+
+fun spawnCreeps(creeps: Array<Creep>, spawn: StructureSpawn) {
     val body = arrayOf<BodyPartConstant>(WORK, CARRY, MOVE)
 
     if(canSpawnNewCreep(spawn,body)) return
     ensureWorkersNeededAreKnown(spawn.room)
 
-    val role: Role = when {
-        creeps.count { it.memory.role == Role.HARVESTER } < 2 -> Role.HARVESTER
-
-        creeps.none { it.memory.role == Role.UPGRADER } -> Role.UPGRADER
-
-        spawn.room.find(FIND_MY_CONSTRUCTION_SITES).isNotEmpty() &&
-                creeps.count { it.memory.role == Role.BUILDER } < 2 -> Role.BUILDER
-
-        else -> return
+    val roomMemory = spawn.room.memory
+    //reduce computation by moving this to run once each room
+    loop@ for(i in 0 until spawn.room.find(FIND_SOURCES).size) {
+        val (role, source) = when {
+            shouldBuildMoreWorkers(roomMemory.buildersNeeded[i], creeps, Role.BUILDER,i) -> Role.BUILDER to i
+            shouldBuildMoreWorkers(roomMemory.harvestersNeeded[i], creeps, Role.HARVESTER,i) -> Role.HARVESTER to i
+            shouldBuildMoreWorkers(roomMemory.upgradersNeeded[i], creeps, Role.UPGRADER,i) -> Role.UPGRADER to i
+            shouldBuildMoreWorkers(roomMemory.repairersNeeded[i], creeps, Role.REPAIRER,i) -> Role.REPAIRER to i
+            else -> continue@loop
+        }
+        return spawn(spawn,body,role,i)
     }
 
+}
+
+fun spawn(spawn: StructureSpawn, body: Array<BodyPartConstant>, role : Role, resource: Int) {
     val newName = "${role::class.simpleName}_${Game.time}"
     val code = spawn.spawnCreep(body, newName, options {
         memory = jsObject<CreepMemory> {
             this.role = role
-            this.resourceIndex = 0
+            this.resourceIndex = resource
         }
     })
 
