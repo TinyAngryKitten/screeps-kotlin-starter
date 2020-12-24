@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: gradlew build
-      run: sh gradlew.sh build
+      run: sh gradlew build
     - name: stage changed files
       run: git add *
     - name: commit changed files
