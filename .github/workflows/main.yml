@@ -17,12 +17,11 @@ jobs:
     - name: gradlew build
       run: |
         sh gradlew clean build
-        rm *.map
+        rm build/minified-js/*.map
     - name: stage changed files
       run: git add *
     - name: commit changed files
       run: |
-        
         git config --local user.name "builderbot"
         git commit --allow-empty -m "update js files"
     - name: Push changes # push the output folder to your repo
