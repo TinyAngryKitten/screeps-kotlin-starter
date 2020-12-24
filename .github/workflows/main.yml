@@ -21,7 +21,7 @@ jobs:
     - name: commit changed files
       run: |
         git config --local user.name "builderbot"
-        git commit -m "update js files"
+        git commit --allow-empty -m "update js files"
     - name: Push changes # push the output folder to your repo
       uses: ad-m/github-push-action@master
       with:
