@@ -20,5 +20,8 @@ jobs:
       run: git add *
     - name: commit changed files
       run: git commit -m "update js files"
-    - name: push code to master
-      run: git push origin HEAD:master
+    - name: Push changes # push the output folder to your repo
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        force: true
