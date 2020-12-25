@@ -17,13 +17,15 @@ jobs:
     - name: gradlew build
       run: |
         sh gradlew clean build
-        rm build/minified-js/*.map
+        mkdir build/release
+        cp build/js/packages/main/kotlin/*.js build/release
+        cp build/js/packages/main/kotlin/lib/*.js build/release
     - name: stage changed files
       run: git add *
     - name: commit changed files
       run: |
         git config --local user.name "builderbot"
-        git commit --allow-empty -m "update js files"
+        git commit --allow-empty -m "create release files"
     - name: Push changes # push the output folder to your repo
       uses: ad-m/github-push-action@master
       with:
