@@ -48,20 +48,29 @@ fun canSpawnNewCreep(spawn: StructureSpawn, body : Array<BodyPartConstant>) =
 fun shouldBuildMoreWorkers(nrNeeded: Int, creeps: Array<Creep>, role : Role, forResource: Int) =
     nrNeeded > creeps.count { it.memory.role == role && it.memory.resourceIndex == forResource}
 
-fun spawnCreeps(creeps: Array<Creep>, spawn: StructureSpawn) {
-    val body = arrayOf<BodyPartConstant>(WORK, CARRY, MOVE)
+fun determineBestWorkerBody(spawn : StructureSpawn) : Array<BodyPartConstant> {
+    val nrOfParts = (spawn.room.energyCapacityAvailable / 76).div(3)
+    return mutableListOf<BodyPartConstant>().apply {
+        addAll((0 until nrOfParts).map { WORK })
+        addAll((0 until nrOfParts).map { CARRY })
+        addAll((0 until nrOfParts).map { MOVE })
+    }.toTypedArray().takeIf { it.isNotEmpty() } ?: arrayOf(WORK, CARRY, CARRY, MOVE)
+}
 
-    if(canSpawnNewCreep(spawn,body)) return
+fun spawnCreeps(creeps: Array<Creep>, spawn: StructureSpawn) {
+    val body = determineBestWorkerBody(spawn)//arrayOf<BodyPartConstant>(WORK, CARRY, MOVE)
+
+    if(canSpawnNewCreep(spawn,body))
     ensureWorkersNeededAreKnown(spawn.room)
 
     val roomMemory = spawn.room.memory
     //reduce computation by moving this to run once each room
     loop@ for(i in spawn.room.find(FIND_SOURCES).indices) {
-        val (role, source) = when {
-            shouldBuildMoreWorkers(roomMemory.buildersNeeded[i], creeps, Role.BUILDER,i) -> Role.BUILDER to i
-            shouldBuildMoreWorkers(roomMemory.harvestersNeeded[i], creeps, Role.HARVESTER,i) -> Role.HARVESTER to i
-            shouldBuildMoreWorkers(roomMemory.upgradersNeeded[i], creeps, Role.UPGRADER,i) -> Role.UPGRADER to i
-            shouldBuildMoreWorkers(roomMemory.repairersNeeded[i], creeps, Role.REPAIRER,i) -> Role.REPAIRER to i
+        val role = when {
+            shouldBuildMoreWorkers(roomMemory.buildersNeeded[i], creeps, Role.BUILDER,i) -> Role.BUILDER
+            shouldBuildMoreWorkers(roomMemory.harvestersNeeded[i], creeps, Role.HARVESTER,i) -> Role.HARVESTER
+            shouldBuildMoreWorkers(roomMemory.upgradersNeeded[i], creeps, Role.UPGRADER,i) -> Role.UPGRADER
+            shouldBuildMoreWorkers(roomMemory.repairersNeeded[i], creeps, Role.REPAIRER,i) -> Role.REPAIRER
             else -> continue@loop
         }
         return spawn(spawn,body,role,i)

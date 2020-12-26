@@ -12,7 +12,7 @@ fun Creep.closestEnergyStoreWithSpace(room: Room) : StoreOwner? = room.find(FIND
         .asSequence()
         .filter { (it.structureType == STRUCTURE_EXTENSION || it.structureType == STRUCTURE_SPAWN) }
         .map { it.unsafeCast<StoreOwner>() }
-        .filter { it.store.getFreeCapacity(RESOURCE_ENERGY) >= store.getCapacity() }
+        .filter { it.store.getFreeCapacity(RESOURCE_ENERGY) > 0 }
         .firstOrNull() ?: console.log("no energy store found").let { null }
 
 fun Creep.harvest(fromRoom: Room = this.room, toRoom: Room = this.room) {
