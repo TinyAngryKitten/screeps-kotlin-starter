@@ -1,8 +1,10 @@
 package creeps
 
 import data.Role
+import memory.building
+import memory.resourceIndex
+import memory.temporaryTask
 import screeps.api.*
-import starter.*
 
 fun Creep.build(assignedRoom: Room = this.room) {
     if( !buildingIsPossible(assignedRoom)) return doTemporaryTask()

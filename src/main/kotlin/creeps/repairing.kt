@@ -3,7 +3,9 @@ package creeps
 import data.Role
 import screeps.api.*
 import screeps.api.structures.Structure
-import starter.temporaryTask
+import memory.temporaryTask
+
+fun Creep.repair() = performPrimaryTaskIfPossible({ repair(null) }, repairIsPossible(room))
 
 fun Creep.repair(structToRepair: Structure? = null) {
     val struct = structToRepair

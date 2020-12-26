@@ -2,20 +2,20 @@ package starter
 
 
 import building.buildExtensionsCloseToController
+import building.ensureCriticalRoadsExists
 import creeps.build
 import creeps.harvest
+import creeps.repair
 import creeps.upgrade
 import data.Role
-import decisions.determineBuildersNeeded
-import decisions.determineHarvestersNeeded
-import decisions.determineUpgradersNeeded
 import decisions.spawnCreeps
+import memory.criticalRoadsBuilt
+import memory.numberOfCreeps
+import memory.role
 import screeps.api.*
 import screeps.api.structures.StructureSpawn
 import screeps.utils.isEmpty
-import screeps.utils.memory.memory
 import screeps.utils.unsafe.delete
-import screeps.utils.unsafe.jsObject
 
 fun gameLoop() {
     console.log("look starting")
@@ -33,16 +33,26 @@ fun gameLoop() {
 
     console.log("building...")
     val controller = mainSpawn.room.controller
-    controller?.let(::buildExtensionsCloseToController)
+    controller?.also(::buildExtensionsCloseToController)
+    ensureRoadsAreBuilt(mainSpawn.room)
 
     console.log("performing role actions...")
     for ((_, creep) in Game.creeps) {
+        console.log("$creep")
         when (creep.memory.role) {
             Role.HARVESTER -> creep.harvest()
             Role.BUILDER -> creep.build()
-            Role.UPGRADER -> controller?.let { creep.upgrade(it)}
-            else -> {}
+            Role.UPGRADER -> creep.upgrade(controller)
+            Role.REPAIRER -> creep.repair()
+            else -> {console.log("no role, do nothing")}
         }
+    }
+}
+
+private fun ensureRoadsAreBuilt(room : Room) {
+    if(!room.memory.criticalRoadsBuilt) {
+        ensureCriticalRoadsExists(room)
+        room.memory.criticalRoadsBuilt = true
     }
 }
 

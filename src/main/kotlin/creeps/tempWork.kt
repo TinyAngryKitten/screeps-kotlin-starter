@@ -2,7 +2,7 @@ package creeps
 
 import data.Role
 import screeps.api.Creep
-import starter.temporaryTask
+import memory.temporaryTask
 
 fun Creep.doTemporaryTask() {
     if(memory.temporaryTask == Role.UNASSIGNED) memory.temporaryTask = when {
@@ -20,3 +20,9 @@ fun Creep.doTemporaryTask() {
         else -> room.controller?.let(::upgrade)
     }
 }
+
+fun Creep.performPrimaryTaskIfPossible(primaryTask : () -> Unit, condition : Boolean) =
+    if(condition) {
+        memory.temporaryTask = Role.UNASSIGNED
+        primaryTask()
+    } else doTemporaryTask()
