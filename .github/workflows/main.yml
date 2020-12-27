@@ -19,9 +19,9 @@ jobs:
         sh gradlew clean build
     - name: add build files to release folder
       run: |
-        mkdir release
         rm -r build/js/packages_imported/kotlin-test
         rm -r build/js/packages_imported/kotlin-test-js-runner
+        rm release/*.js
         cp build/js/packages/main/kotlin/main.js release
         find build/js/packages_imported -name \*.js -exec cp {} release \;
     - name: stage changed files
