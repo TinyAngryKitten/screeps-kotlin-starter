@@ -14,12 +14,12 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: gradlew build
+    - name: build release files
       run: |
         sh gradlew clean build
-        mkdir build/release
-        cp build/js/packages/main/kotlin/*.js build/release
-        cp build/js/packages/main/kotlin/lib/*.js build/release
+        mkdir release
+        cp build/js/packages/main/kotlin/*.js release
+        cp build/js/packages/main/kotlin/lib/*.js release
     - name: stage changed files
       run: git add *
     - name: commit changed files
