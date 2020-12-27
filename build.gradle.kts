@@ -76,7 +76,7 @@ tasks.register<RestTask>("deploy") {
         }
 
         val jsFiles = minifiedCodeLocation.listFiles { _, name -> name.endsWith(".js") }.orEmpty()
-        val (mainModule, otherModules) = jsFiles.partition { it.nameWithoutExtension == project.name }
+        val (mainModule, otherModules) = jsFiles.partition { it.nameWithoutExtension == "main" }
 
         val main = mainModule.firstOrNull()
             ?: throw IllegalStateException("Could not find js file corresponding to main module in ${minifiedCodeLocation.absolutePath}. Was looking for ${project.name}.js")

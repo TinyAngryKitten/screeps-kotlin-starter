@@ -17,15 +17,19 @@ jobs:
     - name: build release files
       run: |
         sh gradlew clean build
+    - name: add build files to release folder
+      run: |
         mkdir release
-        cp build/js/packages/main/kotlin/*.js release
-        cp build/js/packages/main/kotlin/lib/*.js release
+        rm -r build/js/packages_imported/kotlin-test
+        rm -r build/js/packages_imported/kotlin-test-js-runner
+        cp build/js/packages/main/kotlin/main.js release
+        find build/js/packages_imported -name \*.js -exec cp {} release \;
     - name: stage changed files
       run: git add *
     - name: commit changed files
       run: |
         git config --local user.name "builderbot"
-        git commit --allow-empty -m "create release files"
+        git commit --allow-empty -m "add new release files"
     - name: Push changes # push the output folder to your repo
       uses: ad-m/github-push-action@master
       with:
