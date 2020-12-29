@@ -10,28 +10,28 @@ import starter.*
 //TODO: determine how many workers can harvest a source at once
 //TODO: as for now we dont account for slower worker speed when returning with resources
 //just ensure that there is enough harvesters that one (almost) allways is harvesting
-fun determineHarvestersNeeded(room: Room, harvestSpeed : Int = 5) = listOf(3,3) /*room.find(FIND_SOURCES)
+fun determineHarvestersNeeded(room: Room, harvestSpeed : Int = 5) = room.find(FIND_SOURCES)
         .map {source ->
             source.pos.findClosestByPath(FIND_MY_SPAWNS)
                     ?.pos?.findPathTo(source)
                     ?.size?.div(harvestSpeed)?.plus(1)//ensure at least one
                     ?: 0.also { console.log("No possible paths from $source to a spawn") }
-        }*/
+        }
 
-fun determineBuildersNeeded(room: Room, harvestSpeed : Int = 5) = listOf(1,2)/*room.find(FIND_SOURCES)
+fun determineBuildersNeeded(room: Room, harvestSpeed : Int = 5) = room.find(FIND_SOURCES)
         .map {source ->
             source.pos.findClosestByPath(FIND_MY_SPAWNS)//assume construction will mainly happen close to spawn
                     ?.pos?.findPathTo(source)//diregard construction speed for now
                     ?.size?.div(harvestSpeed)?.plus(1)//ensure at least one
                     ?: 0.also { console.log("No possible paths from $source to a spawn") }
-        }*/
+        }
 
-fun determineUpgradersNeeded(room: Room, harvestSpeed : Int = 5) = listOf(3,3) /* room.find(FIND_SOURCES)
+fun determineUpgradersNeeded(room: Room, harvestSpeed : Int = 5) = room.find(FIND_SOURCES)
         .map {source ->
                     room.controller?.pos?.findPathTo(source)
                     ?.size?.div(harvestSpeed)?.plus(1)//ensure at least one
                     ?: 0.also { console.log("No possible paths from $source to a spawn") }
-        }*/
+        }
 
 
 private fun ensureWorkersNeededAreKnown(room : Room) {
@@ -51,7 +51,7 @@ fun shouldBuildMoreWorkers(nrNeeded: Int, creeps: Array<Creep>, role : Role, for
 fun determineBestWorkerBody(spawn : StructureSpawn) : Array<BodyPartConstant> {
     val nrOfParts = (spawn.room.energyCapacityAvailable / 76).div(3)
     return mutableListOf<BodyPartConstant>().apply {
-        addAll((0 until nrOfParts).map { WORK })
+        addAll((0 .. nrOfParts).map { WORK })
         addAll((0 until nrOfParts).map { CARRY })
         addAll((0 until nrOfParts).map { MOVE })
     }.toTypedArray().takeIf { it.isNotEmpty() } ?: arrayOf(WORK, CARRY, CARRY, MOVE)
@@ -75,11 +75,10 @@ fun spawnCreeps(creeps: Array<Creep>, spawn: StructureSpawn) {
         }
         return spawn(spawn,body,role,i)
     }
-
 }
 
 fun spawn(spawn: StructureSpawn, body: Array<BodyPartConstant>, role : Role, resource: Int) {
-    val newName = "${role::class.simpleName}_${Game.time}"
+    val newName = "${role}_${Game.time}"
     val code = spawn.spawnCreep(body, newName, options {
         memory = jsObject<CreepMemory> {
             this.role = role
