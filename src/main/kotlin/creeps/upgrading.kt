@@ -11,10 +11,8 @@ fun Creep.upgrade(controller: StructureController?) =
 fun Creep.upgrade(controller: StructureController) {
     if(store[RESOURCE_ENERGY] == 0 && memory.building) {
         memory.building = false
-        say("collecting energy")
     } else if(store[RESOURCE_ENERGY] == store.getCapacity() && !memory.building) {
         memory.building = true
-        say("returning with energy")
     }
 
     if (!memory.building) {

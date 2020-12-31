@@ -13,14 +13,10 @@ fun Creep.build(assignedRoom: Room = this.room,
     if( !buildingIsPossible(assignedRoom)) return doTemporaryTask()
     memory.temporaryTask = Role.UNASSIGNED
 
-    if (memory.building && store[RESOURCE_ENERGY] == 0) {
+    if (memory.building && store[RESOURCE_ENERGY] == 0)
         memory.building = false
-        say("🔄 harvest")
-    }
-    if (!memory.building && store[RESOURCE_ENERGY] == store.getCapacity()) {
+    if (!memory.building && store[RESOURCE_ENERGY] == store.getCapacity())
         memory.building = true
-        say("🚧 build")
-    }
 
     if (memory.building) {
         if(!siteIdIsValid(memory.targetId))

@@ -16,11 +16,9 @@ fun Creep.closestEnergyStoreWithSpace(room: Room) : StoreOwner? = room.find(FIND
         .firstOrNull() ?: console.log("no energy store found").let { null }
 
 fun Creep.harvest(fromRoom: Room = this.room, toRoom: Room = this.room) {
-    console.log("harvesting...")
     val target = closestEnergyStoreWithSpace(toRoom)
 
     if(target == null || !harvestIsPossible(target)) return doTemporaryTask()
-    console.log("should be possible...")
     memory.temporaryTask = Role.UNASSIGNED
 
     if (store[RESOURCE_ENERGY] < store.getCapacity()) {
