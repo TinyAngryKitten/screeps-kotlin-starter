@@ -24,14 +24,8 @@ fun Creep.harvest(fromRoom: Room = this.room, toRoom: Room = this.room) {
     memory.temporaryTask = Role.UNASSIGNED
 
     if (store[RESOURCE_ENERGY] < store.getCapacity()) {
-        console.log("should harvest...")
         val sources = fromRoom.find(FIND_SOURCES)
-        if (harvest(sources[memory.resourceIndex]) == ERR_NOT_IN_RANGE) {
-            when(val error = moveTo(sources[memory.resourceIndex].pos)) {
-                OK -> {console.log("moving to resource...")}
-                else -> console.log("$name is unable to move due to: $error")
-            }
-        }
+        goHarvest(sources[memory.resourceIndex])
     } else {
         if (transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             console.log("storing...")
@@ -42,3 +36,9 @@ fun Creep.harvest(fromRoom: Room = this.room, toRoom: Room = this.room) {
         }
     }
 }
+
+fun Creep.goHarvest(source: Source) =
+    when(val resultCode = harvest(source)) {
+        ERR_NOT_IN_RANGE -> walkTo(source.pos)
+        else -> resultCode
+    }
