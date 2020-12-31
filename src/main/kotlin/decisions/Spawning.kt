@@ -51,10 +51,10 @@ fun shouldBuildMoreWorkers(nrNeeded: Int, creeps: Array<Creep>, role : Role, for
 fun determineBestWorkerBody(spawn : StructureSpawn) : Array<BodyPartConstant> {
     val nrOfParts = (spawn.room.energyCapacityAvailable / 76).div(3)
     return mutableListOf<BodyPartConstant>().apply {
-        addAll((0 .. nrOfParts).map { WORK })
-        addAll((0 until nrOfParts).map { CARRY })
+        addAll((0 .. nrOfParts).map { CARRY })
+        addAll((0 until nrOfParts).map { WORK })
         addAll((0 until nrOfParts).map { MOVE })
-    }.toTypedArray().takeIf { it.isNotEmpty() } ?: arrayOf(WORK, CARRY, CARRY, MOVE)
+    }.toTypedArray().takeIf { it.isNotEmpty() } ?: arrayOf<BodyPartConstant>(WORK, CARRY, CARRY, MOVE)
 }
 
 fun spawnCreeps(creeps: Array<Creep>, spawn: StructureSpawn) {
@@ -67,8 +67,8 @@ fun spawnCreeps(creeps: Array<Creep>, spawn: StructureSpawn) {
     //reduce computation by moving this to run once each room
     loop@ for(i in spawn.room.find(FIND_SOURCES).indices) {
         val role = when {
-            shouldBuildMoreWorkers(roomMemory.buildersNeeded[i], creeps, Role.BUILDER,i) -> Role.BUILDER
             shouldBuildMoreWorkers(roomMemory.harvestersNeeded[i], creeps, Role.HARVESTER,i) -> Role.HARVESTER
+            shouldBuildMoreWorkers(roomMemory.buildersNeeded[i], creeps, Role.BUILDER,i) -> Role.BUILDER
             shouldBuildMoreWorkers(roomMemory.upgradersNeeded[i], creeps, Role.UPGRADER,i) -> Role.UPGRADER
             shouldBuildMoreWorkers(roomMemory.repairersNeeded[i], creeps, Role.REPAIRER,i) -> Role.REPAIRER
             else -> continue@loop

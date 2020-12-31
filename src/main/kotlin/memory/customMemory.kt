@@ -8,7 +8,7 @@ fun complexMemory(defaultValue: () -> List<Int>): ReadWriteProperty<MemoryMarker
         MemoryMappingDelegate(
                 defaultValue,
                 {it.joinToString(",",transform = Int::toString) },
-                { it.split(",").map(String::toInt) }
+                { it.split(",").takeIf { it.firstOrNull()?.isNotEmpty() ?: false }?.map(String::toInt) ?: listOf() }
         )
 
 fun serializeableMemory(defaultValue: () -> List<Int>): ReadWriteProperty<MemoryMarker, List<Int>> =

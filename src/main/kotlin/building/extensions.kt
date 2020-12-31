@@ -19,7 +19,3 @@ fun buildExtensionsCloseToController(controller: StructureController) {
         }
     }
 }
-
-fun buildRoadsToSources() {
-
-}

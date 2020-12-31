@@ -13,6 +13,7 @@ import screeps.utils.memory.memory
 var CreepMemory.building: Boolean by memory { false }
 var CreepMemory.role by memory(Role.UNASSIGNED)
 var CreepMemory.resourceIndex by memory { 0 }
+var CreepMemory.targetId by memory { "" }
 var CreepMemory.temporaryTask by memory(Role.UNASSIGNED)
 
 /* Rest of the persistent memory structures.
