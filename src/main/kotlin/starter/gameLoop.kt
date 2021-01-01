@@ -8,6 +8,7 @@ import creeps.harvest
 import creeps.repair
 import creeps.upgrade
 import data.Role
+import decisions.defendRoom
 import decisions.spawnCreeps
 import memory.criticalRoadsBuilt
 import memory.numberOfCreeps
@@ -35,8 +36,8 @@ fun gameLoop() {
     val controller = mainSpawn.room.controller
     controller?.also(::buildExtensionsCloseToController)
     ensureRoadsAreBuilt(mainSpawn.room)
+    defendRoom(mainSpawn.room)
 
-    console.log("performing role actions...")
     for ((_, creep) in Game.creeps) {
         console.log("$creep")
         when (creep.memory.role) {
@@ -44,7 +45,7 @@ fun gameLoop() {
             Role.BUILDER -> creep.build()
             Role.UPGRADER -> creep.upgrade(controller)
             Role.REPAIRER -> creep.repair()
-            else -> {console.log("no role, do nothing")}
+            else -> { creep.memory.role = Role.HARVESTER }
         }
     }
 }

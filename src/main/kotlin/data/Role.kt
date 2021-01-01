@@ -5,5 +5,6 @@ enum class Role {
     HARVESTER,
     BUILDER,
     UPGRADER,
-    REPAIRER
+    REPAIRER,
+    FLAGER
 }

@@ -58,9 +58,9 @@ fun determineBestWorkerBody(spawn : StructureSpawn) : Array<BodyPartConstant> {
 }
 
 fun spawnCreeps(creeps: Array<Creep>, spawn: StructureSpawn) {
-    val body = determineBestWorkerBody(spawn)//arrayOf<BodyPartConstant>(WORK, CARRY, MOVE)
+    val workerBody = determineBestWorkerBody(spawn)//arrayOf<BodyPartConstant>(WORK, CARRY, MOVE)
 
-    if(canSpawnNewCreep(spawn,body))
+    if(canSpawnNewCreep(spawn,workerBody))
     ensureWorkersNeededAreKnown(spawn.room)
 
     val roomMemory = spawn.room.memory
@@ -73,7 +73,7 @@ fun spawnCreeps(creeps: Array<Creep>, spawn: StructureSpawn) {
             shouldBuildMoreWorkers(roomMemory.repairersNeeded[i], creeps, Role.REPAIRER,i) -> Role.REPAIRER
             else -> continue@loop
         }
-        return spawn(spawn,body,role,i)
+        return spawn(spawn,workerBody,role,i)
     }
 }
 
