@@ -16,7 +16,6 @@
   var Unit = Kotlin.kotlin.Unit;
   var any = Kotlin.kotlin.sequences.any_veqyi0$;
   var ensureNotNull = Kotlin.ensureNotNull;
-  var listOf = Kotlin.kotlin.collections.listOf_i5x0yv$;
   var IntRange = Kotlin.kotlin.ranges.IntRange;
   var until = Kotlin.kotlin.ranges.until_dqglrj$;
   var jsObject = $module$screeps_kotlin_types_jsLegacy.screeps.utils.unsafe.jsObject_7qq44f$;
@@ -458,17 +457,65 @@
   function determineHarvestersNeeded(room, harvestSpeed) {
     if (harvestSpeed === void 0)
       harvestSpeed = 5;
-    return listOf([3, 3]);
+    var $receiver = room.find(FIND_SOURCES);
+    var destination = ArrayList_init($receiver.length);
+    var tmp$;
+    for (tmp$ = 0; tmp$ !== $receiver.length; ++tmp$) {
+      var item = $receiver[tmp$];
+      var tmp$_0 = destination.add_11rb$;
+      var tmp$_1, tmp$_2, tmp$_3, tmp$_4, tmp$_5, tmp$_6;
+      var tmp$_7;
+      if ((tmp$_6 = (tmp$_5 = (tmp$_4 = (tmp$_3 = (tmp$_2 = (tmp$_1 = item.pos.findClosestByPath(FIND_MY_SPAWNS)) != null ? tmp$_1.pos : null) != null ? tmp$_2.findPathTo(item) : null) != null ? tmp$_3.length : null) != null ? tmp$_4 / harvestSpeed | 0 : null) != null ? tmp$_5 + 1 | 0 : null) != null)
+        tmp$_7 = tmp$_6;
+      else {
+        console.log('No possible paths from ' + item + ' to a spawn');
+        tmp$_7 = 0;
+      }
+      tmp$_0.call(destination, tmp$_7);
+    }
+    return destination;
   }
   function determineBuildersNeeded(room, harvestSpeed) {
     if (harvestSpeed === void 0)
       harvestSpeed = 5;
-    return listOf([1, 2]);
+    var $receiver = room.find(FIND_SOURCES);
+    var destination = ArrayList_init($receiver.length);
+    var tmp$;
+    for (tmp$ = 0; tmp$ !== $receiver.length; ++tmp$) {
+      var item = $receiver[tmp$];
+      var tmp$_0 = destination.add_11rb$;
+      var tmp$_1, tmp$_2, tmp$_3, tmp$_4, tmp$_5, tmp$_6;
+      var tmp$_7;
+      if ((tmp$_6 = (tmp$_5 = (tmp$_4 = (tmp$_3 = (tmp$_2 = (tmp$_1 = item.pos.findClosestByPath(FIND_MY_SPAWNS)) != null ? tmp$_1.pos : null) != null ? tmp$_2.findPathTo(item) : null) != null ? tmp$_3.length : null) != null ? tmp$_4 / harvestSpeed | 0 : null) != null ? tmp$_5 + 1 | 0 : null) != null)
+        tmp$_7 = tmp$_6;
+      else {
+        console.log('No possible paths from ' + item + ' to a spawn');
+        tmp$_7 = 0;
+      }
+      tmp$_0.call(destination, tmp$_7);
+    }
+    return destination;
   }
   function determineUpgradersNeeded(room, harvestSpeed) {
     if (harvestSpeed === void 0)
       harvestSpeed = 5;
-    return listOf([3, 3]);
+    var $receiver = room.find(FIND_SOURCES);
+    var destination = ArrayList_init($receiver.length);
+    var tmp$;
+    for (tmp$ = 0; tmp$ !== $receiver.length; ++tmp$) {
+      var item = $receiver[tmp$];
+      var tmp$_0 = destination.add_11rb$;
+      var tmp$_1, tmp$_2, tmp$_3, tmp$_4, tmp$_5, tmp$_6;
+      var tmp$_7;
+      if ((tmp$_6 = (tmp$_5 = (tmp$_4 = (tmp$_3 = (tmp$_2 = (tmp$_1 = room.controller) != null ? tmp$_1.pos : null) != null ? tmp$_2.findPathTo(item) : null) != null ? tmp$_3.length : null) != null ? tmp$_4 / harvestSpeed | 0 : null) != null ? tmp$_5 + 1 | 0 : null) != null)
+        tmp$_7 = tmp$_6;
+      else {
+        console.log('No possible paths from ' + item + ' to a spawn');
+        tmp$_7 = 0;
+      }
+      tmp$_0.call(destination, tmp$_7);
+    }
+    return destination;
   }
   function ensureWorkersNeededAreKnown(room) {
     console.log('performing temp work');
